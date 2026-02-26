@@ -17,6 +17,9 @@ Upcoming version (not yet released)
 Added
 ^^^^^
 
+- Franka Research 3 (FR3) robot with Franka Hand gripper added to
+  asset zoo, with lift cube task integration
+  (``Mjlab-Lift-Cube-Franka-FR3``).
 - Cloud training support via `SkyPilot <https://skypilot.readthedocs.io/>`_
   and Lambda Cloud, with documentation covering setup, monitoring, and
   cost management.

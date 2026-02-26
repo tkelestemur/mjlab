@@ -1,3 +1,9 @@
+from mjlab.asset_zoo.robots.franka_fr3.fr3_constants import (
+  FR3_ACTION_SCALE as FR3_ACTION_SCALE,
+)
+from mjlab.asset_zoo.robots.franka_fr3.fr3_constants import (
+  get_fr3_robot_cfg as get_fr3_robot_cfg,
+)
 from mjlab.asset_zoo.robots.i2rt_yam.yam_constants import (
   YAM_ACTION_SCALE as YAM_ACTION_SCALE,
 )
