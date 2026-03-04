@@ -17,6 +17,8 @@ Upcoming version (not yet released)
 Added
 ^^^^^
 
+- ONNX auto-export and metadata attachment for manipulation tasks (lift cube)
+  on every checkpoint save, matching the velocity and tracking task behavior.
 - Cloud training support via `SkyPilot <https://skypilot.readthedocs.io/>`_
   and Lambda Cloud, with documentation covering setup, monitoring, and
   cost management.
@@ -26,6 +28,9 @@ Added
   (``/update-mjwarp``, ``/commit-push-pr``).
 - Added optional ``ViewerConfig.fovy`` and apply it in native viewer camera
   setup when provided.
+- Native viewer now tracks the first non-fixed body by default (matching
+  the Viser viewer behavior introduced in
+  ``716aaaa58ad7bfaf34d2f771549d461204d1b4ba``).
 - New ``dr`` module (``mjlab.envs.mdp.dr``) replacing ``randomize_field``
   with typed per-field domain randomization functions. Each function
   automatically recomputes derived fields via ``set_const``. Highlights:
@@ -77,7 +82,27 @@ Added
 - ``DebugVisualizer`` now supports ellipsoid visualization via
   ``add_ellipsoid``.
 
+- Interactive velocity joystick sliders in the Viser viewer. Enable the
+  joystick under Commands/Twist to override velocity commands with manual
+  sliders for ``lin_vel_x``, ``lin_vel_y``, and ``ang_vel_z``
+  (`#666 <https://github.com/mujocolab/mjlab/issues/666>`_).
+- Per-term debug visualization toggles in the Viser viewer. Individual
+  command term visualizers (e.g. velocity arrows) can now be toggled
+  independently under Scene/Debug Viz.
+- Viewer single-step mode: press RIGHT arrow (native) or click "Step"
+  (Viser) to advance exactly one physics step while paused.
+- Viewer error recovery: exceptions during stepping now pause the viewer
+  and log the traceback instead of crashing the process.
+- Native viewer runs forward kinematics while paused, keeping
+  perturbation visuals accurate.
+- Viewer speed multipliers use clean power-of-2 fractions (1/32x to 1x).
+
 - Visualizers display the realtime factor alongside FPS.
+
+- ``joint_torques_l2`` now respects ``SceneEntityCfg.actuator_ids``,
+  allowing penalization of a subset of actuators instead of all of them
+  (`#703 <https://github.com/mujocolab/mjlab/pull/703>`_). Contribution by
+  `@saikishor <https://github.com/saikishor>`_.
 
 - Terrain is now a proper ``Entity`` subclass (``TerrainEntity``). This
   allows domain randomization functions to target terrain parameters
@@ -91,6 +116,16 @@ Added
 Changed
 ^^^^^^^
 
+- Reorganized the Viser Controls tab into a cleaner folder hierarchy:
+  Info, Simulation, Commands, Scene (with Environment, Camera, Debug Viz,
+  Contacts sub-folders), and Camera Feeds. The Environment folder is
+  hidden for single-env tasks and the Commands folder is hidden when no
+  command terms are active.
+- Viser camera tracking is now enabled by default so the agent stays in
+  frame on launch.
+- Self collision and illegal contact sensors now use ``history_length`` to
+  catch contacts across decimation substeps. Reward and termination functions
+  read ``force_history`` with a configurable ``force_threshold``.
 - Replaced the single ``scale`` parameter in ``DifferentialIKActionCfg`` with
   separate ``delta_pos_scale`` and ``delta_ori_scale`` for independent scaling
   of position and orientation components.
@@ -103,6 +138,13 @@ Changed
 Fixed
 ^^^^^
 
+- Fixed actuator target resolution for entities whose ``spec_fn`` uses
+  internal ``MjSpec.attach(prefix=...)``
+  (`#709 <https://github.com/mujocolab/mjlab/issues/709>`_).
+- Fixed viewer physics loop starving the renderer by replacing the single
+  sim-time budget with a two-clock design (tracked vs actual sim time).
+  Physics now self-corrects after overshooting, keeping FPS smooth at all
+  speed multipliers.
 - Bundled ``ffmpeg`` for ``mediapy`` via ``imageio-ffmpeg``, removing the
   requirement for a system ``ffmpeg`` install. Thanks to
   `@rdeits-bd <https://github.com/rdeits-bd>`_ for the suggestion.

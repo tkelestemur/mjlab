@@ -59,7 +59,7 @@
     <link rel="prev" title="mjlab.rl" href="rl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Feb 26, 2026"/>
+    <meta name="docbuild:last-update" content="Mar 04, 2026"/>
   </head>
   
   
@@ -240,6 +240,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../motivation.html">Why mjlab?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../migration_isaac_lab.html">Migrating from Isaac Lab</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ &amp; Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../research.html">Research</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
 </ul>
 
@@ -470,6 +471,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.entity_name"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.entity_name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.body_name"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.body_name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.env_idx"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.env_idx</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.max_extra_envs"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.max_extra_envs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.enable_reflections"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.enable_reflections</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.enable_shadows"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.enable_shadows</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.height"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.height</span></code></a></li>
@@ -481,7 +483,6 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#baseviewer">BaseViewer</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer"><code class="docutils literal notranslate"><span class="pre">BaseViewer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer.__init__"><code class="docutils literal notranslate"><span class="pre">BaseViewer.__init__()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer.request_action"><code class="docutils literal notranslate"><span class="pre">BaseViewer.request_action()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer.tick"><code class="docutils literal notranslate"><span class="pre">BaseViewer.tick()</span></code></a></li>
 </ul>
 </li>
@@ -648,6 +649,12 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="mjlab.viewer.ViewerConfig.max_extra_envs">
+<span class="sig-name descname"><span class="pre">max_extra_envs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#mjlab.viewer.ViewerConfig.max_extra_envs" title="Link to this definition">#</a></dt>
+<dd><p>Number of neighboring environments to render around <code class="docutils literal notranslate"><span class="pre">env_idx</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="mjlab.viewer.ViewerConfig.enable_reflections">
 <span class="sig-name descname"><span class="pre">enable_reflections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mjlab.viewer.ViewerConfig.enable_reflections" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -683,19 +690,9 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mjlab.viewer.BaseViewer.request_action">
-<span class="sig-name descname"><span class="pre">request_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/mjlab/viewer/base.html#BaseViewer.request_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjlab.viewer.BaseViewer.request_action" title="Link to this definition">#</a></dt>
-<dd><p>Viewer-specific actions (e.g., PREV_ENV/NEXT_ENV for native).</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="mjlab.viewer.BaseViewer.tick">
 <span class="sig-name descname"><span class="pre">tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/mjlab/viewer/base.html#BaseViewer.tick"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjlab.viewer.BaseViewer.tick" title="Link to this definition">#</a></dt>
-<dd><p>Advance the viewer by one tick.</p>
-<p>Physics and rendering are decoupled: physics steps are governed by a
-sim-time budget (accumulated from wall time * speed multiplier), while
-rendering always happens at the configured <code class="docutils literal notranslate"><span class="pre">frame_rate</span></code>. This keeps
-the display smooth even at slow playback speeds.</p>
+<dd><p>Advance one tick: drain actions, step physics, maybe render.</p>
 <p>Returns True when a render frame was produced, False otherwise.</p>
 </dd></dl>
 
@@ -755,7 +752,7 @@ the display smooth even at slow playback speeds.</p>
 <p>Interactive Viser-based viewer with playback controls.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mjlab.viewer.ViserPlayViewer.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjlab.viewer.EnvProtocol" title="mjlab.viewer.base.EnvProtocol"><span class="pre">EnvProtocol</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjlab.viewer.PolicyProtocol" title="mjlab.viewer.base.PolicyProtocol"><span class="pre">PolicyProtocol</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjlab.viewer.VerbosityLevel" title="mjlab.viewer.base.VerbosityLevel"><span class="pre">VerbosityLevel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">VerbosityLevel.SILENT</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/mjlab/viewer/viser/viewer.html#ViserPlayViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjlab.viewer.ViserPlayViewer.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjlab.viewer.EnvProtocol" title="mjlab.viewer.EnvProtocol"><span class="pre">EnvProtocol</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjlab.viewer.PolicyProtocol" title="mjlab.viewer.PolicyProtocol"><span class="pre">PolicyProtocol</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mjlab.viewer.VerbosityLevel" title="mjlab.viewer.VerbosityLevel"><span class="pre">VerbosityLevel</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">VerbosityLevel.SILENT</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">viser_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">viser.ViserServer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/mjlab/viewer/viser/viewer.html#ViserPlayViewer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjlab.viewer.ViserPlayViewer.__init__" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -917,6 +914,7 @@ the display smooth even at slow playback speeds.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.entity_name"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.entity_name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.body_name"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.body_name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.env_idx"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.env_idx</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.max_extra_envs"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.max_extra_envs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.enable_reflections"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.enable_reflections</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.enable_shadows"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.enable_shadows</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.ViewerConfig.height"><code class="docutils literal notranslate"><span class="pre">ViewerConfig.height</span></code></a></li>
@@ -928,7 +926,6 @@ the display smooth even at slow playback speeds.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#baseviewer">BaseViewer</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer"><code class="docutils literal notranslate"><span class="pre">BaseViewer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer.__init__"><code class="docutils literal notranslate"><span class="pre">BaseViewer.__init__()</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer.request_action"><code class="docutils literal notranslate"><span class="pre">BaseViewer.request_action()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.viewer.BaseViewer.tick"><code class="docutils literal notranslate"><span class="pre">BaseViewer.tick()</span></code></a></li>
 </ul>
 </li>
@@ -1015,7 +1012,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Feb 26, 2026.
+  Last updated on Mar 04, 2026.
   <br/>
 </p>
   </div>
