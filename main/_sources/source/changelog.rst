@@ -21,10 +21,45 @@ Added
   primary names in the order they appear along the per-contact axis of the
   output tensors. This makes it possible to map a contact-data column back
   to the primary it belongs to (:issue:`914`).
+- Added per-world mesh variant support via ``VariantEntityCfg``. Each
+  world in a batched simulation can now use a different mesh asset for
+  the same logical entity (e.g. world 0 holds a cube, world 1 a
+  sphere). Variants are passed as a ``dict[str, Callable]`` of named
+  spec callables; the optional ``assignment`` field controls how worlds
+  map to variants and accepts ``None`` (uniform), a ``dict[str, float]``
+  of per-variant weights, or a custom ``Callable[[int], Sequence[int]]``.
+  Mesh-derived constants (collision bounds, body inertials, subtree
+  mass, inverse weights) are compiled per-variant and stored as
+  per-world arrays in the Warp model, so domain randomization, the
+  native viewer, the offscreen renderer, and the Viser viewer all pick
+  up the variant assignment automatically. Variants must share the
+  same kinematic structure (same bodies, joints, joint types); only
+  mesh geoms may differ. Assignment is fixed at simulation init. See
+  :ref:`heterogeneous_worlds` for usage. With help from @XiangruiJiang.
+- Per-world mesh variants now support per-variant materials and textures.
+  Each variant can reference its own named material, which is automatically
+  prefixed and scattered via ``geom_matid`` alongside the existing
+  ``geom_dataid`` table. Variants without a material get ``matid = -1``.
+  Contribution by @omarrayyann.
 
 Changed
 ^^^^^^^
 
+- Bumped ``mujoco`` to 3.8 and ``mujoco-warp`` to 3.8.0. The ``multiccd``
+  enable flag was removed in mujoco 3.8 (it became default-on), so configs
+  that listed ``"multiccd"`` in ``MujocoCfg.enableflags`` need to drop it.
+- Camera segmentation now matches ``mujoco_warp``'s typed segmentation
+  output. ``CameraSensorData.segmentation`` stores ``(object_id,
+  object_type)`` pairs in shape ``[B, H, W, 2]`` instead of the previous
+  legacy geom-id-only layout. Contribution by @tkelestemur.
+- Sped up ``RayCaster`` post-processing by removing boolean-mask indexing
+  operations and replacing them with ``masked_fill_`` plus a clamped-distance
+  formulation of ``hit_pos_w`` that places misses at the world origin. This
+  removes all CUDA syncs from the ray post-process, letting the CPU thread
+  proceed while GPU-based sensing runs. Contribution by @bd-pdomanico.
+- Bumped ``rsl-rl-lib`` from 5.0.1 to 5.2.0. This brings ``torch.compile`` support for
+  PPO and Distillation, and optional std clamping and constant std in
+  ``GaussianDistribution``. No code changes required on the mjlab side.
 - ``TerrainEntityCfg`` debug visualization sites (environment origins,
   terrain origins, flat patches) are now off by default. Set
   ``debug_vis=True`` to re-enable them. The sites inflated ``nsite`` and
@@ -45,6 +80,34 @@ Changed
 Fixed
 ^^^^^
 
+- Fixed duplicate random seeds across nodes in multi-node training. The
+  per-process seed offset in ``scripts/train.py`` now uses the global
+  ``RANK`` instead of ``LOCAL_RANK``. Contribution by @bd-pdomanico.
+- Fixed ``apply_body_impulse`` firing an impulse on the very first step (and
+  the first step after every reset) instead of starting with a cooldown as
+  documented. The cooldown is now sampled lazily on the first call so impulse
+  timing is decorrelated from episode resets (:issue:`973`).
+- Fixed ``dr.pd_gains`` and ``dr.effort_limits`` silently no-oping when
+  passed an ``Operation`` object (e.g. ``dr.scale``) instead of a string.
+  Both functions now accept ``Operation | str`` like every other DR event
+  and raise ``ValueError`` for unsupported operations (:issue:`971`).
+- Fixed ``ContactSensor`` with ``global_frame=True`` and
+  ``reduce`` ∈ {``"none"``, ``"mindist"``, ``"maxforce"``} producing forces
+  rotated onto the wrong axis. The contact-frame→world rotation matrix had
+  its columns ordered ``[tangent, tangent2, normal]`` instead of
+  ``[normal, tangent, tangent2]``, projecting the normal-force component
+  onto a tangent direction. Contribution by @bd-pdomanico.
+- Fixed ``extras["log"]`` entries written by reward terms (e.g. ``Metrics/*``
+  values in velocity tasks) being silently discarded on any step where at
+  least one environment resets. ``_reset_idx`` was clearing the dict after
+  ``reward_manager.compute()`` had already populated it. The clear now
+  happens at the top of ``step()`` and ``reset()`` so that all entries
+  survive (:issue:`957`).
+- Fixed ``ManagerBasedRlEnv`` initializing Warp on all visible CUDA devices
+  even when constructed with ``device="cpu"``. ``seed_rng`` now accepts a
+  ``device`` argument and skips ``wp.rand_init`` on CPU devices, so a
+  CPU-only env no longer claims a CUDA context on machines with a visible
+  GPU (:issue:`949`).
 - Fixed ``ContactSensor.compute_first_contact`` and ``compute_first_air``
   occasionally missing events when a contact began or ended right at the
   last physics substep of a control step. ``current_contact_time`` /
