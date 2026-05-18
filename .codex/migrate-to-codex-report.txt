@@ -1,0 +1,21 @@
+Migration inventory:
+  active: instruction files - 2 found
+    - CLAUDE.md
+    - AGENTS.md
+  inactive: skills - none found
+  active: command sources - 2 found
+    provider: source command (2)
+      - commit-push-pr
+      - update-mjwarp
+  inactive: subagents - none found
+Migration surfaces:
+  active: AGENTS.md - 1 instruction file(s) found.
+  active: skills - 2 skill(s) converted.
+  active: MCP config - 0 MCP server(s) converted into config.toml.
+  inactive: subagents - No subagents found.
+Migration report:
+  symlinked: AGENTS.md - Linked to /Users/tarik/code/mjlab/CLAUDE.md.
+  rewritten: .codex/hooks.json - Rewritten for Codex hooks; review behavior before relying on it. Codex hooks run `command` handlers, skip `async` / `prompt` / `agent` handlers, and ignore `matcher` for `UserPromptSubmit` and `Stop`.
+  resolved: .agents/skills/source-command-commit-push-pr/SKILL.md - Converted source command `commit-push-pr` to a Codex skill and rewrote provider-specific runtime expansion as explicit Codex workflow instructions.
+  resolved: .agents/skills/source-command-update-mjwarp/SKILL.md - Converted source command `update-mjwarp` to a Codex skill and rewrote provider-specific argument placeholders as explicit Codex workflow instructions.
+  rewritten: .codex/config.toml - Converted 0 MCP server entries.

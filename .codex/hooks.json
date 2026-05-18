@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run ruff format"
+          }
+        ],
+        "matcher": "Write|Edit"
+      }
+    ]
+  }
+}
